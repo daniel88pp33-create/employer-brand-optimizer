@@ -5,7 +5,7 @@
 
 import type { Metadata } from "next";
 import { Zap, Star, Globe, ArrowRight } from "lucide-react";
-import JDOptimizer from "@/components/JDOptimizer";
+import OptimizerForm from "@/components/OptimizerForm";
 
 // 首頁專屬 SEO metadata（會覆蓋 layout.tsx 的預設值）
 export const metadata: Metadata = {
@@ -173,7 +173,7 @@ export default function HomePage() {
       {/* ===== 主工具區 (Client Component) ===== */}
       {/* ★ id="optimizer" 讓 Header 的錨點連結可以跳轉 */}
       <section id="optimizer" aria-label="JD 優化工具">
-        <JDOptimizer />
+        <OptimizerForm />
       </section>
 
       {/* ===== FOOTER ===== */}
