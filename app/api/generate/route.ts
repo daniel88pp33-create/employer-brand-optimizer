@@ -6,12 +6,13 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 // 版本標記 - v2 修正錯誤處理
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
 export async function POST(req: NextRequest) {
+  let debugMode = false;
+
   try {
+    const url = new URL(req.url);
+    debugMode = url.searchParams.get('debug') === '1' || url.searchParams.get('debug') === 'true';
+
     const body = await req.json();
     const { companyName, companyCulture, mission, jobTitle, originalJD, styleId } = body;
 
@@ -21,6 +22,19 @@ export async function POST(req: NextRequest) {
         headers: { 'Content-Type': 'application/json' },
       });
     }
+
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return new Response(
+        JSON.stringify({
+          error: '🔑 環境變數配置錯誤',
+          detail: 'ANTHROPIC_API_KEY 未正確設定。若在 Vercel 部署，請在 Project Settings > Environment Variables 中添加此變數。',
+          debugMode,
+        }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const style = companyStyles.find((s) => s.id === styleId);
     if (!style) {
@@ -117,7 +131,7 @@ ${originalJD}
         'X-Content-Type-Options': 'nosniff',
       },
     });
-  } catch (err) {
+  } catch (err: any) {
     // 詳細的錯誤處理與追蹤
     const isDevelopment = process.env.NODE_ENV === 'development';
     const errorMessage = err instanceof Error ? err.message : String(err);
@@ -194,16 +208,24 @@ ${originalJD}
 
     // 預設通用錯誤
     console.error('[API /generate] Unexpected Error - Please check server logs');
-    return new Response(
-      JSON.stringify({
-        error: '生成失敗',
-        detail: '系統遇到未預期的錯誤，請檢查伺服器日誌或聯繫管理員。',
-        ...(isDevelopment && { 
-          errorType: err?.constructor.name,
-          message: errorMessage,
-        }),
-      }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
+    // 最後保底錯誤回應：包含 stack 可協助定位問題
+    const responseBody: Record<string, any> = {
+      error: '生成失敗',
+      detail: '系統遇到未預期的錯誤，請檢查伺服器日誌或聯繫管理員。',
+      hasApiKey: Boolean(process.env.ANTHROPIC_API_KEY),
+      nodeEnv: process.env.NODE_ENV,
+    };
+
+    if (isDevelopment || debugMode) {
+      (responseBody as any).errorType = err?.constructor?.name;
+      (responseBody as any).message = errorMessage;
+      (responseBody as any).stack = err?.stack;
+    }
+
+    return new Response(JSON.stringify(responseBody, null, 2), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
+
