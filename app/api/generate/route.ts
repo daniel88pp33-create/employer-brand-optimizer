@@ -3,7 +3,8 @@ import { NextRequest } from 'next/server';
 import { companyStyles } from '@/lib/companyStyles';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60;
+export const runtime = 'edge';
+export const maxDuration = 30;
 
 // 版本標記 - v2 修正錯誤處理
 export async function POST(req: NextRequest) {
