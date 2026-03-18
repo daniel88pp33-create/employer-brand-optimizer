@@ -118,9 +118,92 @@ ${originalJD}
       },
     });
   } catch (err) {
-    console.error('Generate error:', err);
+    // 詳細的錯誤處理與追蹤
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    
+    console.error('[API /generate] Error Status Time:', new Date().toISOString());
+    console.error('[API /generate] Error Type:', err?.constructor.name);
+    console.error('[API /generate] Error Message:', errorMessage);
+    console.error('[API /generate] Full Error:', err);
+
+    // 檢查 API Key 是否存在
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.error('[API /generate] Missing ANTHROPIC_API_KEY');
+      return new Response(
+        JSON.stringify({
+          error: '🔑 環境變數配置錯誤',
+          detail: 'ANTHROPIC_API_KEY 未正確設定。若在 Vercel 部署，請在 Project Settings > Environment Variables 中添加此變數。',
+        }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Anthropic API 錯誤
+    if (err instanceof Anthropic.APIError) {
+      console.error('[API /generate] Anthropic API Error:', {
+        status: err.status,
+        message: err.message,
+        type: err.type,
+      });
+
+      if (err.status === 401) {
+        return new Response(
+          JSON.stringify({
+            error: '❌ API Key 無效或已過期',
+            detail: '請確認 ANTHROPIC_API_KEY 設定正確，或重新申請新的 API Key',
+            ...(isDevelopment && { originalError: errorMessage }),
+          }),
+          { status: 401, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      if (err.status === 429) {
+        return new Response(
+          JSON.stringify({
+            error: 'API 請求過於頻繁',
+            detail: '請稍後再試，您可能已達到 API 使用限額。',
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      if (err.status === 500) {
+        return new Response(
+          JSON.stringify({
+            error: 'Anthropic API 伺服器錯誤',
+            detail: 'Claude API 服務暫時不可用，請稍後重試。',
+            ...(isDevelopment && { originalError: errorMessage }),
+          }),
+          { status: 500, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // 網路錯誤
+    if (errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout') || errorMessage.includes('network')) {
+      console.error('[API /generate] Network Error');
+      return new Response(
+        JSON.stringify({
+          error: '🌐 網路連線錯誤',
+          detail: '無法連接到 Claude API，請檢查網路連線或稍後重試。',
+          ...(isDevelopment && { originalError: errorMessage }),
+        }),
+        { status: 503, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // 預設通用錯誤
+    console.error('[API /generate] Unexpected Error - Please check server logs');
     return new Response(
-      JSON.stringify({ error: '生成失敗，請確認 API Key 設定後再試' }),
+      JSON.stringify({
+        error: '生成失敗',
+        detail: '系統遇到未預期的錯誤，請檢查伺服器日誌或聯繫管理員。',
+        ...(isDevelopment && { 
+          errorType: err?.constructor.name,
+          message: errorMessage,
+        }),
+      }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
