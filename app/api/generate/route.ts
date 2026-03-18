@@ -5,6 +5,7 @@ import { COMPANY_STYLES } from '@/lib/styles';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
+// 版本標記 - v2 修正錯誤處理
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
