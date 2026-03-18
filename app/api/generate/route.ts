@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest } from 'next/server';
-import { COMPANY_STYLES } from '@/lib/styles';
+import { companyStyles } from '@/lib/companyStyles';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const style = COMPANY_STYLES.find((s) => s.id === styleId);
+    const style = companyStyles.find((s) => s.id === styleId);
     if (!style) {
       return new Response(JSON.stringify({ error: '無效的風格選擇' }), {
         status: 400,
@@ -55,7 +55,7 @@ ${originalJD}
 
 ## 目標品牌風格
 風格：${style.name} ${style.emoji}
-風格說明：${style.promptHint}
+風格說明：${style.tone}
 
 ## 輸出格式（嚴格遵守）
 必須輸出以下兩個版本，用分隔符區分，不要加任何其他說明文字：
