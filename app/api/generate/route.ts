@@ -83,9 +83,8 @@ ${originalJD}
 - Strong call to action: 1-2 sentences with brand voice）`;
 
     const streamResponse = anthropic.messages.stream({
-      model: 'claude-opus-4-6',
+      model: 'claude-opus-4-5',
       max_tokens: 4096,
-      thinking: { type: 'adaptive' },
       system: systemPrompt,
       messages: [{ role: 'user', content: userPrompt }],
     });
@@ -145,7 +144,6 @@ ${originalJD}
       console.error('[API /generate] Anthropic API Error:', {
         status: err.status,
         message: err.message,
-        type: err.type,
       });
 
       if (err.status === 401) {

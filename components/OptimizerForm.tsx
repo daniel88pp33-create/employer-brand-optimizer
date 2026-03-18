@@ -14,6 +14,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
+import { companyStyles } from '@/lib/companyStyles';
 import StyleSelector from './StyleSelector';
 import ResultDisplay from './ResultDisplay';
 
@@ -225,6 +226,7 @@ export default function OptimizerForm() {
           </button>
           {styleOpen && (
             <StyleSelector
+              styles={companyStyles}
               selected={form.styleId}
               onSelect={(id) => update('styleId', id)}
             />
