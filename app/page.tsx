@@ -1,90 +1,196 @@
-import { Metadata } from 'next';
-import OptimizerForm from '@/components/OptimizerForm';
-import { Sparkles, Zap, Globe, Copy } from 'lucide-react';
+// ============================================================
+// app/page.tsx — 首頁 (Server Component)
+// 職責：SSR 渲染語義化 HTML、SEO 內容、載入互動元件
+// ============================================================
 
+import type { Metadata } from "next";
+import { Zap, Star, Globe, ArrowRight } from "lucide-react";
+import JDOptimizer from "@/components/JDOptimizer";
+
+// 首頁專屬 SEO metadata（會覆蓋 layout.tsx 的預設值）
 export const metadata: Metadata = {
-  title: '雇主品牌優化系統 | AI 驅動 JD 文案生成，22 種企業風格',
+  title: "雇主品牌優化系統 | AI 將 JD 轉化為頂尖人才磁鐵",
   description:
-    '免費使用 AI（Claude Opus）將原始招募 JD 轉化為高轉換率的雇主品牌文案。支援矽谷新創、ESG 永續、電競熱血等 22 種企業風格，中英文對照輸出，一鍵複製到 LinkedIn 或 104。',
+    "免費試用！輸入職稱與原始 JD，選擇 22 種企業風格之一，AI 立即生成高轉換率的雙語職缺文案。適用 LinkedIn、104、CakeResume 等平台。",
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-domain.vercel.app",
+    languages: {
+      "zh-TW": "/",
+      "en-US": "/en",
+    },
+  },
 };
 
-const FEATURES = [
-  { icon: Sparkles, label: '22 種企業風格', desc: '矽谷新創到日系精工' },
-  { icon: Globe, label: '中英文對照', desc: '雙語同步生成' },
-  { icon: Zap, label: '串流即時輸出', desc: '秒見文字生成過程' },
-  { icon: Copy, label: '一鍵複製', desc: '直貼 LinkedIn / 104' },
+// ★ 數據統計：用於 Hero Section 的社會證明
+const stats = [
+  { label: "企業風格", value: "22+" },
+  { label: "平均節省時間", value: "87%" },
+  { label: "中英雙語輸出", value: "✓" },
+  { label: "一鍵複製", value: "✓" },
 ];
 
-export default function Home() {
+// ★ 功能特色：用於說明區塊
+const features = [
+  {
+    icon: <Zap className="w-6 h-6" />,
+    title: "秒速生成",
+    desc: "30 秒內將原始 JD 轉化為專業文案，省去反覆修改的時間成本。",
+  },
+  {
+    icon: <Star className="w-6 h-6" />,
+    title: "22 種企業風格",
+    desc: "從矽谷新創到傳統金融，從電競熱血到 ESG 永續，精準匹配您的品牌調性。",
+  },
+  {
+    icon: <Globe className="w-6 h-6" />,
+    title: "中英雙語輸出",
+    desc: "自動生成繁體中文與英文版本，一份輸入，同步佈局全球人才市場。",
+  },
+];
+
+export default function HomePage() {
   return (
-    <main className="min-h-screen flex flex-col">
-      {/* ── HEADER ── */}
-      <header className="relative border-b border-white/5 bg-gray-950/80 backdrop-blur-xl">
-        {/* Gradient glow */}
-        <div
-          aria-hidden
-          className="absolute inset-0 pointer-events-none overflow-hidden"
-        >
-          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-blue-600/10 rounded-full blur-3xl" />
-        </div>
+    // ★ 語義化 HTML5：使用正確的結構標籤有助於 SEO
+    <main className="min-h-screen bg-slate-50">
 
-        <div className="relative max-w-7xl mx-auto px-4 md:px-6 py-6">
-          {/* Brand */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xl">⚡</span>
-                <h1 className="text-xl md:text-2xl font-bold text-gradient">
-                  雇主品牌優化系統
-                </h1>
+      {/* ===== HEADER / NAVBAR ===== */}
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-900/95 backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
+                <Zap className="h-5 w-5 text-white" />
               </div>
-              <p className="text-gray-500 text-sm">
-                Employer Branding Optimizer — AI-Powered JD Transformation
-              </p>
-            </div>
-
-            {/* Feature pills */}
-            <div className="flex flex-wrap gap-2">
-              {FEATURES.map(({ icon: Icon, label }) => (
-                <span
-                  key={label}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-800/80 border border-gray-700/60 rounded-full text-xs text-gray-300"
-                >
-                  <Icon className="w-3 h-3 text-blue-400" />
-                  {label}
+              <div>
+                <span className="text-lg font-bold text-white">BrandJD</span>
+                <span className="ml-1.5 hidden text-sm text-slate-400 sm:inline">
+                  雇主品牌優化系統
                 </span>
-              ))}
+              </div>
             </div>
+            {/* 導覽連結 */}
+            <nav aria-label="主要導覽">
+              <a
+                href="#optimizer"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400"
+              >
+                立即使用
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </nav>
           </div>
         </div>
       </header>
 
-      {/* ── SEO HERO (visually minimal, semantically rich) ── */}
+      {/* ===== HERO SECTION ===== */}
+      {/* ★ SEO 重點：使用 <section> + <h1> 確保語義清晰 */}
       <section
-        aria-label="功能說明"
-        className="max-w-7xl mx-auto px-4 md:px-6 pt-5 pb-2"
+        aria-labelledby="hero-heading"
+        className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 py-20 text-center"
       >
-        <div className="bg-gradient-to-r from-blue-500/5 to-violet-500/5 border border-blue-500/10 rounded-2xl px-5 py-4">
-          <p className="text-gray-400 text-sm leading-relaxed">
-            <strong className="text-gray-200 font-semibold">如何使用：</strong>
-            輸入您的公司資訊與原始職位描述（JD），選擇符合企業個性的品牌風格，
-            AI 將根據「招募漏斗下層（轉換導向）」策略，為您生成
-            <strong className="text-blue-300">中英文對照</strong>的高品質雇主品牌文案，
-            可直接複製貼到 LinkedIn、104、CakeResume 等平台。
+        {/* 裝飾性背景光暈 */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+        >
+          <div className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-600/20 blur-3xl" />
+          <div className="absolute -bottom-20 right-1/4 h-[400px] w-[400px] rounded-full bg-purple-600/15 blur-3xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          {/* 頂部標籤 */}
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm text-indigo-300">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-500" />
+            </span>
+            AI 驅動 × 雇主品牌優化
+          </div>
+
+          {/* ★ H1 標籤：每頁只有一個，包含核心關鍵字 */}
+          <h1
+            id="hero-heading"
+            className="mb-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
+          >
+            讓每份 JD 都成為
+            <br />
+            <span className="text-gradient">頂尖人才的磁鐵</span>
+          </h1>
+
+          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-300">
+            輸入原始職缺說明，選擇您的企業風格，AI 立即生成{" "}
+            <strong className="text-white">招募漏斗下層・轉換導向</strong>{" "}
+            的高品質文案，並自動輸出中英對照版本。
           </p>
+
+          {/* 數字亮點 */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {stats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-sm"
+              >
+                <div className="text-2xl font-bold text-white">{stat.value}</div>
+                <div className="mt-1 text-xs text-slate-400">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── MAIN TOOL ── */}
-      <div className="flex-1 max-w-7xl mx-auto w-full">
-        <OptimizerForm />
-      </div>
+      {/* ===== 功能說明 ===== */}
+      <section
+        aria-labelledby="features-heading"
+        className="bg-white py-14 border-b border-slate-100"
+      >
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <h2
+            id="features-heading"
+            className="mb-10 text-center text-2xl font-bold text-slate-800"
+          >
+            為什麼選擇 BrandJD？
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-3">
+            {features.map((f) => (
+              <article
+                key={f.title}
+                className="group rounded-2xl border border-slate-100 bg-slate-50 p-6 transition hover:border-indigo-200 hover:bg-indigo-50/30 hover:shadow-md"
+              >
+                <div className="mb-4 inline-flex rounded-xl bg-indigo-100 p-3 text-indigo-600 transition group-hover:bg-indigo-200">
+                  {f.icon}
+                </div>
+                <h3 className="mb-2 text-lg font-semibold text-slate-800">
+                  {f.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-500">{f.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="border-t border-white/5 py-6 mt-4">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-600">
-          <p>© 2025 雇主品牌優化系統 · Powered by Claude Opus 4.6</p>
-          <p>適用平台：LinkedIn · 104 · CakeResume · 1111 · Yourator · Glassdoor</p>
+      {/* ===== 主工具區 (Client Component) ===== */}
+      {/* ★ id="optimizer" 讓 Header 的錨點連結可以跳轉 */}
+      <section id="optimizer" aria-label="JD 優化工具">
+        <JDOptimizer />
+      </section>
+
+      {/* ===== FOOTER ===== */}
+      <footer className="border-t border-slate-200 bg-slate-900 py-10 text-center">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="mb-4 flex items-center justify-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
+              <Zap className="h-4 w-4 text-white" />
+            </div>
+            <span className="font-bold text-white">BrandJD</span>
+          </div>
+          <p className="text-sm text-slate-400">
+            雇主品牌優化系統 — 用 AI 打造頂尖人才磁鐵
+          </p>
+          <p className="mt-2 text-xs text-slate-600">
+            Powered by Anthropic Claude · Built with Next.js + Tailwind CSS
+          </p>
         </div>
       </footer>
     </main>

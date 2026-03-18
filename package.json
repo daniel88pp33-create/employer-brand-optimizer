@@ -1,5 +1,5 @@
 {
-  "name": "employer-brand-optimizer",
+  "name": "employer-branding-optimizer",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,19 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.79.0",
-    "autoprefixer": "^10.4.27",
-    "lucide-react": "^0.474.0",
-    "next": "^15.1.6",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "@anthropic-ai/sdk": "^0.27.0",
+    "lucide-react": "^0.383.0"
   },
   "devDependencies": {
-    "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "postcss": "^8",
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "postcss": "^8",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5"
   }
 }
