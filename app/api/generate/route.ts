@@ -134,11 +134,20 @@ ${originalJD}
     }
 
     // 將 SSE 轉為純文字串流
+    // 注意：decoder 必須跨 chunk 複用，否則中文 3-byte UTF-8 在 chunk 邊界會變亂碼
     const encoder = new TextEncoder();
+    const decoder = new TextDecoder('utf-8', { fatal: false });
+    let sseBuffer = '';
+
     const transform = new TransformStream<Uint8Array, Uint8Array>({
       transform(chunk, controller) {
-        const text = new TextDecoder().decode(chunk, { stream: true });
-        for (const line of text.split('\n')) {
+        // 用同一個 decoder 實例解碼，保留跨 chunk 的多位元組字元狀態
+        sseBuffer += decoder.decode(chunk, { stream: true });
+        const lines = sseBuffer.split('\n');
+        // 最後一行可能不完整，保留到下一個 chunk
+        sseBuffer = lines.pop() ?? '';
+
+        for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
           const data = line.slice(6).trim();
           if (data === '[DONE]') return;
@@ -150,6 +159,21 @@ ${originalJD}
           } catch {
             // 忽略無法解析的行
           }
+        }
+      },
+      flush(controller) {
+        // 處理最後殘留的 buffer
+        const remaining = decoder.decode() + sseBuffer;
+        for (const line of remaining.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') return;
+          try {
+            const ev = JSON.parse(data);
+            if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
+              controller.enqueue(encoder.encode(ev.delta.text));
+            }
+          } catch {}
         }
       },
     });
