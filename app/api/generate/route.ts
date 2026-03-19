@@ -1,4 +1,3 @@
-import Anthropic from '@anthropic-ai/sdk';
 import { NextRequest } from 'next/server';
 import { companyStyles } from '@/lib/companyStyles';
 
@@ -6,14 +5,8 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
 export const maxDuration = 30;
 
-// 版本標記 - v2 修正錯誤處理
 export async function POST(req: NextRequest) {
-  let debugMode = false;
-
   try {
-    const url = new URL(req.url);
-    debugMode = url.searchParams.get('debug') === '1' || url.searchParams.get('debug') === 'true';
-
     const body = await req.json();
     const { companyName, companyCulture, mission, jobTitle, originalJD, styleId } = body;
 
@@ -24,18 +17,13 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    if (!process.env.ANTHROPIC_API_KEY) {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
       return new Response(
-        JSON.stringify({
-          error: '🔑 環境變數配置錯誤',
-          detail: 'ANTHROPIC_API_KEY 未正確設定。若在 Vercel 部署，請在 Project Settings > Environment Variables 中添加此變數。',
-          debugMode,
-        }),
+        JSON.stringify({ error: '🔑 ANTHROPIC_API_KEY 未設定，請至 Vercel Project Settings > Environment Variables 添加' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
-
-    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const style = companyStyles.find((s) => s.id === styleId);
     if (!style) {
@@ -97,136 +85,66 @@ ${originalJD}
 - "What you'll gain": 4-5 specific benefits and growth opportunities
 - Strong call to action: 1-2 sentences with brand voice）`;
 
-    const streamResponse = anthropic.messages.stream({
-      model: 'claude-opus-4-5',
-      max_tokens: 4096,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }],
+    // 直接呼叫 Anthropic REST API（native fetch，Edge runtime 完全相容）
+    const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 4096,
+        stream: true,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }],
+      }),
     });
 
-    const encoder = new TextEncoder();
+    // 在 stream 開始前先確認 API 是否成功，才能正確回傳錯誤碼
+    if (!apiRes.ok) {
+      const errText = await apiRes.text();
+      return new Response(
+        JSON.stringify({ error: `Anthropic API 錯誤 (${apiRes.status})`, detail: errText }),
+        { status: 502, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
-    const readableStream = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const chunk of streamResponse) {
-            if (
-              chunk.type === 'content_block_delta' &&
-              chunk.delta.type === 'text_delta'
-            ) {
-              controller.enqueue(encoder.encode(chunk.delta.text));
+    // 將 SSE 事件流轉換為純文字串流
+    const encoder = new TextEncoder();
+    const transform = new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        const text = new TextDecoder().decode(chunk, { stream: true });
+        for (const line of text.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') return;
+          try {
+            const ev = JSON.parse(data);
+            if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
+              controller.enqueue(encoder.encode(ev.delta.text));
             }
+          } catch {
+            // 忽略無法解析的 SSE 行
           }
-        } catch (err) {
-          controller.error(err);
-        } finally {
-          controller.close();
         }
       },
     });
 
-    return new Response(readableStream, {
+    return new Response(apiRes.body!.pipeThrough(transform), {
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'X-Content-Type-Options': 'nosniff',
       },
     });
-  } catch (err: any) {
-    // 詳細的錯誤處理與追蹤
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    const errorMessage = err instanceof Error ? err.message : String(err);
-    
-    console.error('[API /generate] Error Status Time:', new Date().toISOString());
-    console.error('[API /generate] Error Type:', err?.constructor.name);
-    console.error('[API /generate] Error Message:', errorMessage);
-    console.error('[API /generate] Full Error:', err);
-
-    // 檢查 API Key 是否存在
-    if (!process.env.ANTHROPIC_API_KEY) {
-      console.error('[API /generate] Missing ANTHROPIC_API_KEY');
-      return new Response(
-        JSON.stringify({
-          error: '🔑 環境變數配置錯誤',
-          detail: 'ANTHROPIC_API_KEY 未正確設定。若在 Vercel 部署，請在 Project Settings > Environment Variables 中添加此變數。',
-        }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Anthropic API 錯誤
-    if (err instanceof Anthropic.APIError) {
-      console.error('[API /generate] Anthropic API Error:', {
-        status: err.status,
-        message: err.message,
-      });
-
-      if (err.status === 401) {
-        return new Response(
-          JSON.stringify({
-            error: '❌ API Key 無效或已過期',
-            detail: '請確認 ANTHROPIC_API_KEY 設定正確，或重新申請新的 API Key',
-            ...(isDevelopment && { originalError: errorMessage }),
-          }),
-          { status: 401, headers: { 'Content-Type': 'application/json' } }
-        );
-      }
-
-      if (err.status === 429) {
-        return new Response(
-          JSON.stringify({
-            error: 'API 請求過於頻繁',
-            detail: '請稍後再試，您可能已達到 API 使用限額。',
-          }),
-          { status: 429, headers: { 'Content-Type': 'application/json' } }
-        );
-      }
-
-      if (err.status === 500) {
-        return new Response(
-          JSON.stringify({
-            error: 'Anthropic API 伺服器錯誤',
-            detail: 'Claude API 服務暫時不可用，請稍後重試。',
-            ...(isDevelopment && { originalError: errorMessage }),
-          }),
-          { status: 500, headers: { 'Content-Type': 'application/json' } }
-        );
-      }
-    }
-
-    // 網路錯誤
-    if (errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout') || errorMessage.includes('network')) {
-      console.error('[API /generate] Network Error');
-      return new Response(
-        JSON.stringify({
-          error: '🌐 網路連線錯誤',
-          detail: '無法連接到 Claude API，請檢查網路連線或稍後重試。',
-          ...(isDevelopment && { originalError: errorMessage }),
-        }),
-        { status: 503, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // 預設通用錯誤
-    console.error('[API /generate] Unexpected Error - Please check server logs');
-    // 最後保底錯誤回應：包含 stack 可協助定位問題
-    const responseBody: Record<string, any> = {
-      error: '生成失敗',
-      detail: '系統遇到未預期的錯誤，請檢查伺服器日誌或聯繫管理員。',
-      hasApiKey: Boolean(process.env.ANTHROPIC_API_KEY),
-      nodeEnv: process.env.NODE_ENV,
-    };
-
-    if (isDevelopment || debugMode) {
-      (responseBody as any).errorType = err?.constructor?.name;
-      (responseBody as any).message = errorMessage;
-      (responseBody as any).stack = err?.stack;
-    }
-
-    return new Response(JSON.stringify(responseBody, null, 2), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('[API /generate]', message);
+    return new Response(
+      JSON.stringify({ error: '生成失敗', detail: message }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 }
-
