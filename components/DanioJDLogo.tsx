@@ -10,7 +10,7 @@ export default function DanioJDLogo({
   showText?: boolean;
 }) {
   const iconW = 62;
-  const textW = showText ? 150 : 0;
+  const textW = showText ? 138 : 0;
   const totalW = iconW + textW;
   const vH = 62;
 
@@ -92,21 +92,21 @@ export default function DanioJDLogo({
             y="45"
             fontFamily="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
             fontSize="29"
-            fontWeight="800"
+            fontWeight="900"
             fill="#1A2A6C"
-            letterSpacing="-0.5"
+            letterSpacing="-1"
           >
             Danio
           </text>
-          {/* JD - 青綠 */}
+          {/* JD - 青綠，緊接 Danio 後留一個字空 */}
           <text
-            x="168"
+            x="156"
             y="45"
             fontFamily="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
             fontSize="29"
-            fontWeight="800"
+            fontWeight="900"
             fill="#00B4A6"
-            letterSpacing="-0.5"
+            letterSpacing="-1"
           >
             JD
           </text>
