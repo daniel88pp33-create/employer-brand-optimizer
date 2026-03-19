@@ -4,12 +4,13 @@
 // ============================================================
 
 import type { Metadata } from "next";
-import { Zap, Star, Globe, ArrowRight } from "lucide-react";
+import { Star, Globe, ArrowRight, Zap } from "lucide-react";
 import OptimizerForm from "@/components/OptimizerForm";
+import DanioJDLogo from "@/components/DanioJDLogo";
 
 // 首頁專屬 SEO metadata（會覆蓋 layout.tsx 的預設值）
 export const metadata: Metadata = {
-  title: "雇主品牌優化系統 | AI 將 JD 轉化為頂尖人才磁鐵",
+  title: "DanioJD | AI 將 JD 轉化為頂尖人才磁鐵",
   description:
     "免費試用！輸入職稱與原始 JD，選擇 22 種企業風格之一，AI 立即生成高轉換率的雙語職缺文案。適用 LinkedIn、104、CakeResume 等平台。",
   alternates: {
@@ -58,16 +59,8 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
-                <Zap className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <span className="text-lg font-bold text-white">BrandJD</span>
-                <span className="ml-1.5 hidden text-sm text-slate-400 sm:inline">
-                  雇主品牌優化系統
-                </span>
-              </div>
+            <div className="flex items-center">
+              <DanioJDLogo height={34} showText={true} />
             </div>
             {/* 導覽連結 */}
             <nav aria-label="主要導覽">
@@ -149,7 +142,7 @@ export default function HomePage() {
             id="features-heading"
             className="mb-10 text-center text-2xl font-bold text-slate-800"
           >
-            為什麼選擇 BrandJD？
+            為什麼選擇 DanioJD？
           </h2>
           <div className="grid gap-6 sm:grid-cols-3">
             {features.map((f) => (
@@ -179,11 +172,8 @@ export default function HomePage() {
       {/* ===== FOOTER ===== */}
       <footer className="border-t border-slate-200 bg-slate-900 py-10 text-center">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-4 flex items-center justify-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
-              <Zap className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-bold text-white">BrandJD</span>
+          <div className="mb-4 flex items-center justify-center">
+            <DanioJDLogo height={30} showText={true} />
           </div>
           <p className="text-sm text-slate-400">
             雇主品牌優化系統 — 用 AI 打造頂尖人才磁鐵

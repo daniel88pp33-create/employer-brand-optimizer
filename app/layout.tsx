@@ -19,8 +19,8 @@ const inter = Inter({
 export const metadata: Metadata = {
   // 標題設定：預設標題 + 子頁面模板
   title: {
-    default: "雇主品牌優化系統 | AI 職缺文案轉換器",
-    template: "%s | 雇主品牌優化系統",
+    default: "DanioJD | AI 職缺文案轉換器",
+    template: "%s | DanioJD",
   },
   // 網站描述（Google 搜尋結果顯示的摘要）
   description:
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     locale: "zh_TW",
     alternateLocale: "en_US",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-domain.vercel.app",
-    siteName: "雇主品牌優化系統",
+    siteName: "DanioJD",
     title: "雇主品牌優化系統 | 用 AI 打造頂尖人才磁鐵",
     description:
       "22 種企業風格 × AI 文案生成 × 中英雙語輸出。讓每一份職缺都成為吸引人才的品牌廣告。",
