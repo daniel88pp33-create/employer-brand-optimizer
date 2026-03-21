@@ -1,41 +1,122 @@
 // ============================================================
 // app/page.tsx — 首頁 (Server Component)
-// 職責：SSR 渲染語義化 HTML、SEO 內容、載入互動元件
 // ============================================================
 
 import type { Metadata } from "next";
-import { Star, Globe, ArrowRight, Zap } from "lucide-react";
+import { Star, Globe, Zap } from "lucide-react";
 import OptimizerForm from "@/components/OptimizerForm";
 import DanioJDLogo from "@/components/DanioJDLogo";
+import LandingHero from "@/components/LandingHero";
 
-// 首頁專屬 SEO metadata（會覆蓋 layout.tsx 的預設值）
 export const metadata: Metadata = {
-  title: "DanioJD | AI 將 JD 轉化為頂尖人才磁鐵",
+  title: "DanioJD | AI 雇主品牌 JD 優化工具 — 30 秒生成高轉換職缺文案",
   description:
-    "免費試用！輸入職稱與原始 JD，選擇 20 種企業風格之一，AI 立即生成高轉換率的雙語職缺文案。適用 LinkedIn、104、Yourator 等平台。",
+    "DanioJD 是免費的 AI 雇主品牌 JD 優化工具。輸入職稱與原始 JD，選擇 20 種企業風格，30 秒生成中英雙語高轉換職缺文案。適用 LinkedIn、104、Yourator。",
+  keywords: [
+    "雇主品牌", "JD 優化", "職缺文案", "AI 招募", "employer branding",
+    "job description", "招募工具", "人資工具", "LinkedIn 職缺", "DanioJD",
+  ],
+  openGraph: {
+    title: "DanioJD | AI 雇主品牌 JD 優化工具",
+    description: "30 秒將普通 JD 轉化為吸引頂尖人才的高轉換文案，中英雙語輸出，20 種企業風格。",
+    type: "website",
+    locale: "zh_TW",
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://employer-brand-optimizer.vercel.app",
+    siteName: "DanioJD",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DanioJD | AI 雇主品牌 JD 優化工具",
+    description: "30 秒將普通 JD 轉化為頂尖人才磁鐵。免費、無需註冊、中英雙語。",
+  },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-domain.vercel.app",
-    languages: {
-      "zh-TW": "/",
-      "en-US": "/en",
-    },
+    canonical: process.env.NEXT_PUBLIC_SITE_URL ?? "https://employer-brand-optimizer.vercel.app",
+    languages: { "zh-TW": "/", "en-US": "/en" },
   },
 };
 
-// ★ 數據統計：用於 Hero Section 的社會證明
-const stats = [
-  { label: "企業風格", value: "20+" },
-  { label: "平均節省時間", value: "87%" },
-  { label: "中英雙語輸出", value: "✓" },
-  { label: "一鍵複製", value: "✓" },
-];
+/* ── Structured Data (SEO + GEO) ── */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://employer-brand-optimizer.vercel.app/#software",
+      "name": "DanioJD",
+      "description": "AI 驅動的雇主品牌 JD 優化工具，將普通職缺說明轉化為讓頂尖人才主動投遞的高轉換文案。支援 20 種企業風格，自動輸出中英雙語版本。",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "TWD" },
+      "featureList": [
+        "20 種企業品牌風格選擇",
+        "AI 自動生成中英雙語職缺文案",
+        "30 秒串流輸出",
+        "一鍵複製貼到 LinkedIn / 104 / Yourator",
+        "重新生成產出不同版本",
+      ],
+      "url": "https://employer-brand-optimizer.vercel.app",
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "什麼是 DanioJD？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DanioJD 是一款 AI 驅動的雇主品牌 JD（職缺說明）優化工具。使用者只需輸入公司資訊與原始 JD，選擇品牌風格，AI 即可在 30 秒內生成中英雙語、高轉換率的職缺文案。",
+          },
+        },
+        {
+          "@type": "Question",
+          "name": "DanioJD 支援哪些招募平台？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DanioJD 生成的文案適用於 LinkedIn、104 人力銀行、Yourator、CakeResume、Glassdoor、Indeed 等主流招募平台。",
+          },
+        },
+        {
+          "@type": "Question",
+          "name": "DanioJD 有哪些企業風格可選擇？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DanioJD 提供 20 種企業風格，包含：矽谷新創、傳統金融、熱血電競、ESG 永續、日系精工、台灣科技廠、顧問管理、醫療生技、創意廣告、教育科技、豪華精品、社會企業、元宇宙 Web3、外商跨國、媒體出版、航空旅遊、食品餐飲、人工智慧等，精準匹配不同企業的品牌調性。",
+          },
+        },
+        {
+          "@type": "Question",
+          "name": "使用 DanioJD 需要付費嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DanioJD 目前完全免費使用，無需註冊帳號，直接輸入資訊即可生成文案。",
+          },
+        },
+        {
+          "@type": "Question",
+          "name": "DanioJD 如何讓 JD 吸引頂尖人才？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DanioJD 使用 Anthropic Claude AI 模型，依據頂尖企業（如 AmazingTalker）的雇主品牌寫作框架，將普通職責列表改寫為以影響力導向的文案，讓候選人感受到職位的使命與成長機會，從而提升優質人才的投遞意願。",
+          },
+        },
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "name": "DanioJD",
+      "url": "https://employer-brand-optimizer.vercel.app",
+      "description": "免費 AI 雇主品牌 JD 優化工具",
+      "inLanguage": ["zh-TW", "en"],
+    },
+  ],
+};
 
-// ★ 功能特色：用於說明區塊
+/* ── Features section data ── */
 const features = [
   {
     icon: <Zap className="w-6 h-6" />,
-    title: "秒速生成",
-    desc: "30 秒內將原始 JD 轉化為專業文案，省去反覆修改的時間成本。",
+    title: "30 秒生成",
+    desc: "串流輸出技術，即時看到 AI 寫作過程，省去反覆修改的時間成本。",
   },
   {
     icon: <Star className="w-6 h-6" />,
@@ -51,86 +132,33 @@ const features = [
 
 export default function HomePage() {
   return (
-    // ★ 語義化 HTML5：使用正確的結構標籤有助於 SEO
     <main className="min-h-screen bg-slate-50">
 
-      {/* ===== HEADER / NAVBAR ===== */}
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      {/* ===== HEADER ===== */}
       <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center">
-              <DanioJDLogo height={34} showText={true} />
-            </div>
-            {/* 導覽連結 */}
+            <DanioJDLogo height={34} showText={true} />
             <nav aria-label="主要導覽">
               <a
                 href="#optimizer"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500"
               >
                 立即使用
-                <ArrowRight className="h-4 w-4" />
               </a>
             </nav>
           </div>
         </div>
       </header>
 
-      {/* ===== HERO SECTION ===== */}
-      {/* ★ SEO 重點：使用 <section> + <h1> 確保語義清晰 */}
-      <section
-        aria-labelledby="hero-heading"
-        className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 py-20 text-center"
-      >
-        {/* 裝飾性背景光暈 */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-indigo-600/20 blur-3xl" />
-          <div className="absolute -bottom-20 right-1/4 h-[400px] w-[400px] rounded-full bg-purple-600/15 blur-3xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          {/* 頂部標籤 */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm text-indigo-300">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-500" />
-            </span>
-            AI 驅動 × 雇主品牌優化
-          </div>
-
-          {/* ★ H1 標籤：每頁只有一個，包含核心關鍵字 */}
-          <h1
-            id="hero-heading"
-            className="mb-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
-          >
-            讓每份 JD 都獲得
-            <br />
-            <span className="text-gradient">頂尖人才的高度關注</span>
-          </h1>
-
-          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-300">
-            輸入原始職缺說明，選擇您的企業風格，AI 立即生成{" "}
-            <strong className="text-white">招募漏斗下層・轉換導向</strong>{" "}
-            的高品質文案，並自動輸出中英對照版本。
-          </p>
-
-          {/* 數字亮點 */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {stats.map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 backdrop-blur-sm"
-              >
-                <div className="text-2xl font-bold text-white">{stat.value}</div>
-                <div className="mt-1 text-xs text-slate-400">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ===== LANDING HERO (animated) ===== */}
+      <LandingHero />
 
       {/* ===== 功能說明 ===== */}
       <section
@@ -153,9 +181,7 @@ export default function HomePage() {
                 <div className="mb-4 inline-flex rounded-xl bg-indigo-100 p-3 text-indigo-600 transition group-hover:bg-indigo-200">
                   {f.icon}
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-slate-800">
-                  {f.title}
-                </h3>
+                <h3 className="mb-2 text-lg font-semibold text-slate-800">{f.title}</h3>
                 <p className="text-sm leading-relaxed text-slate-500">{f.desc}</p>
               </article>
             ))}
@@ -163,10 +189,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== 主工具區 (Client Component) ===== */}
-      {/* ★ id="optimizer" 讓 Header 的錨點連結可以跳轉 */}
+      {/* ===== 主工具區 ===== */}
       <section id="optimizer" aria-label="JD 優化工具">
         <OptimizerForm />
+      </section>
+
+      {/* ===== FAQ（隱藏但可被搜尋引擎與 AI 引擎索引）===== */}
+      <section aria-labelledby="faq-heading" className="bg-white border-t border-slate-100 py-14">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <h2 id="faq-heading" className="mb-8 text-center text-xl font-bold text-slate-800">
+            常見問題
+          </h2>
+          <dl className="space-y-6">
+            {(jsonLd["@graph"][1] as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] }).mainEntity.map((q) => (
+              <div key={q.name} className="rounded-xl border border-slate-100 bg-slate-50 p-5">
+                <dt className="font-semibold text-slate-800 mb-2">{q.name}</dt>
+                <dd className="text-sm text-slate-500 leading-relaxed">{q.acceptedAnswer.text}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
 
       {/* ===== FOOTER ===== */}
@@ -175,9 +217,7 @@ export default function HomePage() {
           <div className="mb-4 flex items-center justify-center">
             <DanioJDLogo height={30} showText={true} />
           </div>
-          <p className="text-sm text-slate-400">
-            雇主品牌優化系統 — 用 AI 打造頂尖人才磁鐵
-          </p>
+          <p className="text-sm text-slate-400">雇主品牌優化系統 — 用 AI 打造頂尖人才磁鐵</p>
           <p className="mt-2 text-xs text-slate-600">
             Powered by Anthropic Claude · Built with Next.js + Tailwind CSS
           </p>
