@@ -12,7 +12,7 @@ import DanioJDLogo from "@/components/DanioJDLogo";
 export const metadata: Metadata = {
   title: "DanioJD | AI 將 JD 轉化為頂尖人才磁鐵",
   description:
-    "免費試用！輸入職稱與原始 JD，選擇 20 種企業風格之一，AI 立即生成高轉換率的雙語職缺文案。適用 LinkedIn、104、CakeResume 等平台。",
+    "免費試用！輸入職稱與原始 JD，選擇 20 種企業風格之一，AI 立即生成高轉換率的雙語職缺文案。適用 LinkedIn、104、Yourator 等平台。",
   alternates: {
     canonical: process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-domain.vercel.app",
     languages: {
