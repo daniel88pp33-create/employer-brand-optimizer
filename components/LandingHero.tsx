@@ -94,18 +94,6 @@ const CARDS: CardDef[] = [
     flyAnim: 'flyFromBottomRight', delay: '0.6s',
     pos: { top: '76%', right: '4%' }, width: 218,
   },
-  {
-    id: 'c7',
-    title: '品牌行銷經理',
-    company: '豪華精品 · 台北',
-    bullets: ['制定全通路品牌策略'],
-    tags: ['Brand', 'Marketing'],
-    headerFrom: '#d97706', headerTo: '#f59e0b',
-    border: 'rgba(217,119,6,.22)',
-    tagBg: 'rgba(217,119,6,.10)', tagText: '#d97706',
-    flyAnim: 'flyFromTop', delay: '0.25s',
-    pos: { top: '2%', left: '27%' }, width: 192,
-  },
 ];
 
 /* ── JD Card Component ── */

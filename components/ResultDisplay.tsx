@@ -102,7 +102,7 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
           點擊「開始生成」即可獲得 AI 優化的雇主品牌文案
         </p>
         <div className="mt-6 flex flex-wrap gap-2 justify-center">
-          {['中英文對照', '22 種風格', '一鍵複製', '串流輸出'].map((tag) => (
+          {['中英文對照', '20 種風格', '一鍵複製', '串流輸出'].map((tag) => (
             <span
               key={tag}
               className="px-3 py-1 rounded-full bg-gray-800/80 border border-gray-700/60 text-gray-400 text-xs"
