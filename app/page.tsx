@@ -7,6 +7,7 @@ import { Star, Globe, Zap } from "lucide-react";
 import OptimizerForm from "@/components/OptimizerForm";
 import DanioJDLogo from "@/components/DanioJDLogo";
 import LandingHero from "@/components/LandingHero";
+import FaqAccordion from "@/components/FaqAccordion";
 
 export const metadata: Metadata = {
   title: "DanioJD | AI 雇主品牌 JD 優化工具 — 30 秒生成高轉換職缺文案",
@@ -69,18 +70,10 @@ const jsonLd = {
         },
         {
           "@type": "Question",
-          "name": "DanioJD 支援哪些招募平台？",
+          "name": "DanioJD 適合使用在哪些招募平台？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "DanioJD 生成的文案適用於 LinkedIn、104 人力銀行、Yourator、CakeResume、Glassdoor、Indeed 等主流招募平台。",
-          },
-        },
-        {
-          "@type": "Question",
-          "name": "DanioJD 有哪些企業風格可選擇？",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "DanioJD 提供 20 種企業風格，包含：矽谷新創、傳統金融、熱血電競、ESG 永續、日系精工、台灣科技廠、顧問管理、醫療生技、創意廣告、教育科技、豪華精品、社會企業、元宇宙 Web3、外商跨國、媒體出版、航空旅遊、食品餐飲、人工智慧等，精準匹配不同企業的品牌調性。",
+            "text": "DanioJD 生成的文案適用於 LinkedIn、104 人力銀行、Yourator、Glassdoor、Indeed 等主流招募平台。中文版適合 104、Yourator；英文版適合 LinkedIn、Indeed、Glassdoor。",
           },
         },
         {
@@ -96,7 +89,7 @@ const jsonLd = {
           "name": "DanioJD 如何讓 JD 吸引頂尖人才？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "DanioJD 使用 Anthropic Claude AI 模型，依據頂尖企業（如 AmazingTalker）的雇主品牌寫作框架，將普通職責列表改寫為以影響力導向的文案，讓候選人感受到職位的使命與成長機會，從而提升優質人才的投遞意願。",
+            "text": "DanioJD 使用 Anthropic Claude AI 模型，依據雇主品牌寫作框架將普通職責列表改寫為影響力導向的文案。核心方法包括：用具體畫面取代空洞形容詞、先呈現職位使命再說明條件要求、讓候選人感受到加入後能創造什麼成果，從而提升優質人才的投遞意願。",
           },
         },
       ],
@@ -194,20 +187,18 @@ export default function HomePage() {
         <OptimizerForm />
       </section>
 
-      {/* ===== FAQ（隱藏但可被搜尋引擎與 AI 引擎索引）===== */}
-      <section aria-labelledby="faq-heading" className="bg-white border-t border-slate-100 py-14">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      {/* ===== FAQ ===== */}
+      <section aria-labelledby="faq-heading" className="bg-slate-50 border-t border-slate-100 py-14">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
           <h2 id="faq-heading" className="mb-8 text-center text-xl font-bold text-slate-800">
             常見問題
           </h2>
-          <dl className="space-y-6">
-            {(jsonLd["@graph"][1] as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] }).mainEntity.map((q) => (
-              <div key={q.name} className="rounded-xl border border-slate-100 bg-slate-50 p-5">
-                <dt className="font-semibold text-slate-800 mb-2">{q.name}</dt>
-                <dd className="text-sm text-slate-500 leading-relaxed">{q.acceptedAnswer.text}</dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion
+            items={(jsonLd["@graph"][1] as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] }).mainEntity.map((q) => ({
+              question: q.name,
+              answer: q.acceptedAnswer.text,
+            }))}
+          />
         </div>
       </section>
 
