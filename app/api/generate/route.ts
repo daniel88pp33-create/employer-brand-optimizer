@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     // 前端送來的欄位（對應 OptimizerForm.tsx）
-    const { companyName, companyCulture, mission, jobTitle, originalJD, styleId } = body;
+    const { companyName, companyCulture, mission, jobTitle, originalJD, styleId, variationIndex = 0 } = body;
 
     if (!companyName || !jobTitle || !originalJD || !styleId) {
       return Response.json(
@@ -106,7 +106,8 @@ ${originalJD}
 1. 職責必須忠實對應原始 JD 的實際內容
 2. 語氣完全符合「${style.name}」風格
 3. 中文版用繁體中文，英文版用流暢英文
-4. 嚴格按照格式輸出，以 ===中文版本=== 和 ===English Version=== 分隔`;
+4. 嚴格按照格式輸出，以 ===中文版本=== 和 ===English Version=== 分隔${variationIndex > 0 ? `
+5. 【重要】這是第 ${variationIndex + 1} 次生成，請產出與之前明顯不同的版本：開場角度不同、職責描述換不同切入點、結尾 call-to-action 用不同語氣。保持同等品質但讓候選人感受到是全新的文案。` : ''}`;
 
     // 呼叫 Anthropic API（串流，前端用 ReadableStream 接）
     const apiRes = await fetch('https://api.anthropic.com/v1/messages', {

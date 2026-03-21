@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, Check, Sparkles, Globe, Languages, FileText } from 'lucide-react';
+import { Copy, Check, Sparkles, Globe, Languages, FileText, RefreshCw } from 'lucide-react';
 
 interface ResultDisplayProps {
   rawResult: string;
   isGenerating: boolean;
+  onRegenerate?: () => void;
 }
 
 interface ParsedContent {
@@ -79,7 +80,7 @@ function CopyButton({ text, label, copyKey }: { text: string; label: string; cop
   );
 }
 
-export default function ResultDisplay({ rawResult, isGenerating }: ResultDisplayProps) {
+export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }: ResultDisplayProps) {
   const [activeTab, setActiveTab] = useState<'zh' | 'en'>('zh');
   const hasContent = rawResult.length > 0;
   const isStreaming = isGenerating && hasContent;
@@ -177,7 +178,7 @@ export default function ResultDisplay({ rawResult, isGenerating }: ResultDisplay
         {activeTab === 'zh' ? (
           <div className="h-full animate-slide-up">
             <div className="flex items-center justify-between mb-2 px-1">
-              <span className="text-xs text-gray-500">LinkedIn / 104 / CakeResume 適用</span>
+              <span className="text-xs text-gray-500">LinkedIn / 104 / Yourator 適用</span>
               {zhText && <CopyButton text={zhText} label="複製中文" copyKey="zh" />}
             </div>
             <div className="bg-gray-900/60 border border-gray-700/60 rounded-xl p-5 overflow-auto max-h-[calc(100vh-340px)] min-h-[380px]">
@@ -216,6 +217,17 @@ export default function ResultDisplay({ rawResult, isGenerating }: ResultDisplay
         <FileText className="w-3 h-3" />
         <span>複製後可直接貼到 LinkedIn 職缺、104 職務說明等欄位</span>
       </div>
+
+      {/* Regenerate button */}
+      {onRegenerate && (
+        <button
+          onClick={onRegenerate}
+          className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-gray-600 text-gray-300 text-sm font-medium hover:border-blue-500/60 hover:text-blue-300 hover:bg-blue-500/10 transition-all duration-200"
+        >
+          <RefreshCw className="w-4 h-4" />
+          重新生成（產出不同版本）
+        </button>
+      )}
     </div>
   );
 }

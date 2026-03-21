@@ -48,12 +48,13 @@ export default function OptimizerForm() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
   const [styleOpen, setStyleOpen] = useState(true);
+  const [variationIndex, setVariationIndex] = useState(0);
 
   const update = (key: keyof FormData, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (variation = 0) => {
     if (!form.companyName.trim()) {
       setError('請填寫公司名稱');
       return;
@@ -79,7 +80,7 @@ export default function OptimizerForm() {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, variationIndex: variation }),
       });
 
       if (!res.ok) {
@@ -244,7 +245,7 @@ export default function OptimizerForm() {
         {/* Generate Button */}
         <button
           type="button"
-          onClick={handleGenerate}
+          onClick={() => { setVariationIndex(0); handleGenerate(0); }}
           disabled={isGenerating}
           className="btn-gradient w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-white font-semibold text-sm shadow-lg shadow-blue-500/20 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:animate-none hover:shadow-blue-500/30 hover:scale-[1.01] active:scale-[0.99]"
         >
@@ -256,7 +257,7 @@ export default function OptimizerForm() {
           ) : (
             <>
               <Sparkles className="w-4 h-4" />
-              開始生成雇主品牌文案
+              開始生成雇主品牌 JD
             </>
           )}
         </button>
@@ -270,7 +271,15 @@ export default function OptimizerForm() {
         <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">
           AI 生成結果
         </h2>
-        <ResultDisplay rawResult={rawResult} isGenerating={isGenerating} />
+        <ResultDisplay
+          rawResult={rawResult}
+          isGenerating={isGenerating}
+          onRegenerate={() => {
+            const next = variationIndex + 1;
+            setVariationIndex(next);
+            handleGenerate(next);
+          }}
+        />
       </section>
     </div>
   );
