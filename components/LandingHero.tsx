@@ -332,6 +332,60 @@ export default function LandingHero() {
           完全免費 &nbsp;·&nbsp; 無需註冊 &nbsp;·&nbsp; 30 秒生成
         </p>
 
+        {/* ── 手機版 JD 卡片（桌面隱藏，手機顯示 2 張）── */}
+        <div
+          className="lg:hidden flex gap-3 mt-8 w-full max-w-sm"
+          style={{ animation: 'heroTextAppear 0.7s ease-out 0.75s both' }}
+        >
+          {[CARDS[0], CARDS[3]].map((card, i) => (
+            <div
+              key={card.id}
+              className="flex-1 rounded-xl overflow-hidden"
+              style={{
+                border: `1px solid ${card.border}`,
+                background: 'rgba(255,255,255,0.88)',
+                backdropFilter: 'blur(12px)',
+                boxShadow: '0 4px 16px rgba(0,0,0,.07)',
+                animation: `${i === 0 ? 'flyFromBottomLeft' : 'flyFromBottomRight'} 0.85s cubic-bezier(0.22,0.68,0,1.15) ${0.8 + i * 0.15}s both,
+                            floatCard ${4.5 + i}s ease-in-out ${1.65 + i * 0.15}s infinite`,
+              }}
+            >
+              {/* Header */}
+              <div
+                className="px-2.5 py-1.5 flex items-center justify-between"
+                style={{ background: `linear-gradient(90deg,${card.headerFrom},${card.headerTo})` }}
+              >
+                <span className="text-white text-[10px] font-semibold truncate leading-tight">
+                  {card.title}
+                </span>
+              </div>
+              {/* Body */}
+              <div className="px-2.5 py-2 space-y-1.5">
+                <p className="text-[9px] text-slate-400">{card.company}</p>
+                <ul className="space-y-1">
+                  {card.bullets.slice(0, 1).map((b, bi) => (
+                    <li key={bi} className="flex items-start gap-1">
+                      <span className="mt-[3px] w-1 h-1 rounded-full shrink-0" style={{ background: card.headerFrom }} />
+                      <span className="text-[9px] text-slate-600 leading-tight">{b}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-1 pt-0.5">
+                  {card.tags.slice(0, 2).map((t) => (
+                    <span
+                      key={t}
+                      className="text-[8px] px-1.5 py-0.5 rounded-full font-medium border"
+                      style={{ background: card.tagBg, color: card.tagText, borderColor: card.border }}
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* Scroll indicator — pushed to bottom with mt-auto */}
         <div
           className="mt-auto pb-8 flex flex-col items-center gap-1.5 text-slate-300"

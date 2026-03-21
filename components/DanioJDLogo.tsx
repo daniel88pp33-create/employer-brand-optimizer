@@ -10,7 +10,7 @@ export default function DanioJDLogo({
   showText?: boolean;
 }) {
   const iconW = 62;
-  const textW = showText ? 138 : 0;
+  const textW = showText ? 128 : 0;
   const totalW = iconW + textW;
   const vH = 62;
 
@@ -85,32 +85,33 @@ export default function DanioJDLogo({
 
       {/* ── 文字 ── */}
       {showText && (
-        <>
-          {/* Danio - 深海軍藍 */}
-          <text
-            x="70"
-            y="45"
-            fontFamily="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
-            fontSize="29"
-            fontWeight="900"
+        /* 用單一 <text> + <tspan> 確保跨平台字距一致（避免手機間距偏大問題）
+           stroke + paintOrder="stroke fill" 讓字體在各平台看起來更粗 */
+        <text
+          x="70"
+          y="45"
+          fontFamily="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
+          fontSize="29"
+          fontWeight="900"
+          letterSpacing="-0.5"
+        >
+          <tspan
             fill="#1A2A6C"
-            letterSpacing="-1"
+            stroke="#1A2A6C"
+            strokeWidth="0.6"
+            paintOrder="stroke fill"
           >
             Danio
-          </text>
-          {/* JD - 青綠，緊接 Danio 後留一個字空 */}
-          <text
-            x="156"
-            y="45"
-            fontFamily="system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
-            fontSize="29"
-            fontWeight="900"
+          </tspan>
+          <tspan
             fill="#00B4A6"
-            letterSpacing="-1"
+            stroke="#00B4A6"
+            strokeWidth="0.6"
+            paintOrder="stroke fill"
           >
             JD
-          </text>
-        </>
+          </tspan>
+        </text>
       )}
     </svg>
   );
