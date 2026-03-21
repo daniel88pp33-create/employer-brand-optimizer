@@ -218,6 +218,11 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
         <span>複製後可直接貼到 LinkedIn 職缺、104 職務說明等欄位</span>
       </div>
 
+      {/* Disclaimer */}
+      <p className="mt-3 text-gray-600 text-xs leading-relaxed">
+        AI 產出的內容主要是用來作為優化職缺敘述的初步框架與參考版本。企業仍需依據自身實際營運需求，以及所在地的相關法規進行調整與補充，才能打造出最貼近團隊需求的人才招募內容。
+      </p>
+
       {/* Regenerate button */}
       {onRegenerate && (
         <button
