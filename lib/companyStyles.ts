@@ -1,5 +1,5 @@
 // ============================================================
-// 公司風格定義 — 22 種企業型態
+// 公司風格定義 — 20 種企業型態
 // ============================================================
 
 export interface CompanyStyle {
@@ -16,7 +16,7 @@ export interface CompanyStyle {
 export const companyStyles: CompanyStyle[] = [
   {
     id: "silicon-valley",
-    name: "矽谷新創風",
+    name: "矽谷新創",
     nameEn: "Silicon Valley Startup",
     emoji: "🚀",
     description: "扁平組織・快節奏・改變世界",
@@ -26,7 +26,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "traditional-finance",
-    name: "傳統金融風",
+    name: "傳統金融",
     nameEn: "Traditional Finance",
     emoji: "🏦",
     description: "穩健嚴謹・精英文化・長期發展",
@@ -36,7 +36,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "esports-gaming",
-    name: "熱血電競風",
+    name: "熱血電競",
     nameEn: "Esports & Gaming",
     emoji: "🎮",
     description: "熱情・玩中工作・打造爆款",
@@ -56,7 +56,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "japanese-craftsmanship",
-    name: "日系精工風",
+    name: "日系精工",
     nameEn: "Japanese Craftsmanship",
     emoji: "🎌",
     description: "匠人精神・極致品質・細節為王",
@@ -76,7 +76,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "consulting-mgmt",
-    name: "顧問管理風",
+    name: "顧問管理",
     nameEn: "Management Consulting",
     emoji: "📊",
     description: "策略思維・菁英培訓・快速晉升",
@@ -86,7 +86,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "healthcare-biotech",
-    name: "醫療生技風",
+    name: "醫療生技",
     nameEn: "Healthcare & Biotech",
     emoji: "🧬",
     description: "拯救生命・科學前沿・使命為本",
@@ -96,7 +96,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "creative-agency",
-    name: "創意廣告風",
+    name: "創意廣告",
     nameEn: "Creative Agency",
     emoji: "🎨",
     description: "創意無邊・大膽實驗・作品說話",
@@ -106,7 +106,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "government-public",
-    name: "公務機關風",
+    name: "公務機關",
     nameEn: "Government & Public Sector",
     emoji: "🏛️",
     description: "服務公眾・穩定保障・社會責任",
@@ -116,7 +116,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "ecommerce-retail",
-    name: "電商零售風",
+    name: "電商零售",
     nameEn: "E-commerce & Retail",
     emoji: "🛒",
     description: "數據驅動・高速成長・用戶為王",
@@ -126,7 +126,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "edtech",
-    name: "教育科技風",
+    name: "教育科技",
     nameEn: "Education Technology",
     emoji: "📚",
     description: "改變教育・影響未來・學習型組織",
@@ -136,7 +136,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "luxury-brand",
-    name: "豪華精品風",
+    name: "豪華精品",
     nameEn: "Luxury Brand",
     emoji: "💎",
     description: "卓越品味・極致體驗・品牌傳承",
@@ -146,7 +146,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "social-enterprise",
-    name: "社會企業風",
+    name: "社會企業",
     nameEn: "Social Enterprise",
     emoji: "🤝",
     description: "商業與公益・弱勢關懷・共好文化",
@@ -156,7 +156,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "web3-metaverse",
-    name: "元宇宙 Web3 風",
+    name: "元宇宙 Web3",
     nameEn: "Web3 & Metaverse",
     emoji: "⛓️",
     description: "去中心化・開放協作・無邊界創新",
@@ -166,7 +166,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "multinational-corp",
-    name: "外商跨國風",
+    name: "外商跨國",
     nameEn: "Multinational Corporate",
     emoji: "🌏",
     description: "國際舞台・跨文化・全球移動",
@@ -176,7 +176,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "media-publishing",
-    name: "媒體出版風",
+    name: "媒體出版",
     nameEn: "Media & Publishing",
     emoji: "📰",
     description: "內容為王・說故事・影響輿論",
@@ -186,7 +186,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "aviation-travel",
-    name: "航空旅遊風",
+    name: "航空旅遊",
     nameEn: "Aviation & Travel",
     emoji: "✈️",
     description: "探索世界・服務熱忱・無限里程",
@@ -196,7 +196,7 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "food-beverage",
-    name: "食品餐飲風",
+    name: "食品餐飲",
     nameEn: "Food & Beverage",
     emoji: "🍽️",
     description: "美食文化・顧客喜悅・創意料理",
@@ -206,33 +206,13 @@ export const companyStyles: CompanyStyle[] = [
   },
   {
     id: "ai-first",
-    name: "人工智慧風",
+    name: "人工智慧",
     nameEn: "AI-First Company",
     emoji: "🤖",
     description: "AI 原生・智能革命・重新定義產業",
     tone: "前沿技術感、充滿革命性思維。強調 AI-native 文化、LLM/ML 技術深度、用 AI 重新定義產業、與頂尖 AI 研究者共事。使用如 foundation model、inference、RLHF 等術語，充滿技術底蘊。",
     gradient: "from-indigo-500 to-blue-700",
     textColor: "text-indigo-700",
-  },
-  {
-    id: "open-source",
-    name: "開源社群風",
-    nameEn: "Open Source Community",
-    emoji: "🐧",
-    description: "透明協作・貢獻精神・技術共好",
-    tone: "開放、協作、工程師文化至上。強調開源貢獻、技術透明度、社群回饋、工程師自主權、公開的技術部落格文化。語調真誠、工程師味道濃厚，沒有廢話。",
-    gradient: "from-lime-500 to-green-600",
-    textColor: "text-lime-700",
-  },
-  {
-    id: "military-defense",
-    name: "軍事國防風",
-    nameEn: "Defense & Aerospace",
-    emoji: "🛡️",
-    description: "守護國家・精密技術・使命必達",
-    tone: "嚴謹、使命必達、重視榮譽感。強調保家衛國的使命、高精密技術挑戰、嚴格的專業訓練、團隊紀律與信任。語調剛毅但有情感，讓人感受到工作的重量與榮耀。",
-    gradient: "from-slate-500 to-green-800",
-    textColor: "text-slate-700",
   },
 ];
 

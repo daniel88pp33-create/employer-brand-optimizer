@@ -12,7 +12,7 @@ import DanioJDLogo from "@/components/DanioJDLogo";
 export const metadata: Metadata = {
   title: "DanioJD | AI 將 JD 轉化為頂尖人才磁鐵",
   description:
-    "免費試用！輸入職稱與原始 JD，選擇 22 種企業風格之一，AI 立即生成高轉換率的雙語職缺文案。適用 LinkedIn、104、CakeResume 等平台。",
+    "免費試用！輸入職稱與原始 JD，選擇 20 種企業風格之一，AI 立即生成高轉換率的雙語職缺文案。適用 LinkedIn、104、CakeResume 等平台。",
   alternates: {
     canonical: process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-domain.vercel.app",
     languages: {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 // ★ 數據統計：用於 Hero Section 的社會證明
 const stats = [
-  { label: "企業風格", value: "22+" },
+  { label: "企業風格", value: "20+" },
   { label: "平均節省時間", value: "87%" },
   { label: "中英雙語輸出", value: "✓" },
   { label: "一鍵複製", value: "✓" },
@@ -39,7 +39,7 @@ const features = [
   },
   {
     icon: <Star className="w-6 h-6" />,
-    title: "22 種企業風格",
+    title: "20 種企業風格",
     desc: "從矽谷新創到傳統金融，從電競熱血到 ESG 永續，精準匹配您的品牌調性。",
   },
   {
@@ -106,9 +106,9 @@ export default function HomePage() {
             id="hero-heading"
             className="mb-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
           >
-            讓每份 JD 都成為
+            讓每份 JD 都獲得
             <br />
-            <span className="text-gradient">頂尖人才的磁鐵</span>
+            <span className="text-gradient">頂尖人才的高度關注</span>
           </h1>
 
           <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-300">
