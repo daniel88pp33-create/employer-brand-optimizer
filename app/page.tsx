@@ -125,7 +125,7 @@ const features = [
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-white">
 
       {/* JSON-LD Structured Data */}
       <script
@@ -134,47 +134,47 @@ export default function HomePage() {
       />
 
       {/* ===== HEADER ===== */}
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <DanioJDLogo height={34} showText={true} />
+      <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-[72px] items-center justify-between">
+            <DanioJDLogo height={32} showText={true} />
             <nav aria-label="主要導覽">
               <a
                 href="#optimizer"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500"
+                className="inline-flex items-center gap-1.5 border border-neutral-900 px-4 py-2 text-sm font-bold uppercase tracking-wide text-neutral-900 transition-colors hover:bg-neutral-900 hover:text-white"
               >
-                立即使用
+                開始優化
               </a>
             </nav>
           </div>
         </div>
       </header>
 
-      {/* ===== LANDING HERO (animated) ===== */}
+      {/* ===== LANDING HERO ===== */}
       <LandingHero />
 
       {/* ===== 功能說明 ===== */}
       <section
         aria-labelledby="features-heading"
-        className="bg-white py-14 border-b border-slate-100"
+        className="border-b border-neutral-200 bg-white py-16"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-accent-strong">
+            為什麼選擇 DanioJD
+          </p>
           <h2
             id="features-heading"
-            className="mb-10 text-center text-2xl font-bold text-slate-800"
+            className="mb-10 max-w-md text-balance font-serif text-2xl font-semibold text-neutral-900 sm:text-3xl"
           >
-            為什麼選擇 DanioJD？
+            三個讓 JD 脫穎而出的原因
           </h2>
-          <div className="grid gap-6 sm:grid-cols-3">
+          <div className="grid divide-y divide-neutral-200 border-t border-neutral-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
             {features.map((f) => (
-              <article
-                key={f.title}
-                className="group rounded-2xl border border-slate-100 bg-slate-50 p-6 transition hover:border-indigo-200 hover:bg-indigo-50/30 hover:shadow-md"
-              >
-                <div className="mb-4 inline-flex rounded-xl bg-indigo-100 p-3 text-indigo-600 transition group-hover:bg-indigo-200">
+              <article key={f.title} className="py-8 sm:px-6 sm:first:pl-0">
+                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center border border-neutral-200 text-accent-strong">
                   {f.icon}
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-slate-800">{f.title}</h3>
+                <h3 className="mb-2 text-lg font-semibold text-neutral-900">{f.title}</h3>
                 <p className="text-sm leading-relaxed text-slate-500">{f.desc}</p>
               </article>
             ))}
@@ -188,9 +188,12 @@ export default function HomePage() {
       </section>
 
       {/* ===== FAQ ===== */}
-      <section aria-labelledby="faq-heading" className="bg-slate-50 border-t border-slate-100 py-14">
+      <section aria-labelledby="faq-heading" className="border-t border-neutral-200 bg-white py-16">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-          <h2 id="faq-heading" className="mb-8 text-center text-xl font-bold text-slate-800">
+          <p className="mb-2 text-center text-xs font-bold uppercase tracking-[0.2em] text-accent-strong">
+            Q &amp; A
+          </p>
+          <h2 id="faq-heading" className="mb-8 text-center font-serif text-2xl font-semibold text-neutral-900">
             常見問題
           </h2>
           <FaqAccordion
@@ -203,13 +206,13 @@ export default function HomePage() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="border-t border-slate-200 bg-slate-900 py-10 text-center">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-4 flex items-center justify-center">
-            <DanioJDLogo height={30} showText={true} />
+      <footer className="border-t border-neutral-200 bg-white py-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 text-center sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <DanioJDLogo height={28} showText={true} />
+            <p className="mt-2 text-sm text-slate-500">雇主品牌優化系統 — 用 AI 打造頂尖人才磁鐵</p>
           </div>
-          <p className="text-sm text-slate-400">雇主品牌優化系統 — 用 AI 打造頂尖人才磁鐵</p>
-          <p className="mt-2 text-xs text-slate-600">
+          <p className="font-mono text-xs text-slate-400">
             Powered by Anthropic Claude · Built with Next.js + Tailwind CSS
           </p>
         </div>

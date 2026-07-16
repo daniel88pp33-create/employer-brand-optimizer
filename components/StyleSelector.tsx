@@ -20,7 +20,7 @@ export default function StyleSelector({
   onSelect,
 }: StyleSelectorProps) {
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+    <div className="grid grid-cols-2 gap-px border border-neutral-200 bg-neutral-200 sm:grid-cols-3 lg:grid-cols-4">
       {styles.map((style) => {
         const isSelected = selected === style.id;
         return (
@@ -29,13 +29,12 @@ export default function StyleSelector({
             type="button"
             onClick={() => onSelect(style.id)}
             className={`
-              group relative flex flex-col items-center gap-1.5 rounded-xl border-2 px-3 py-3 text-center
-              transition-all duration-200 hover:scale-[1.03] hover:shadow-md focus-visible:outline-none
-              focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2
+              group relative flex flex-col items-center gap-1.5 px-3 py-3 text-center
+              transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-900
               ${
                 isSelected
-                  ? "border-indigo-500 bg-indigo-50 shadow-md shadow-indigo-100"
-                  : "border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/40"
+                  ? "bg-neutral-50 shadow-[inset_0_-2px_0_0_#A16207]"
+                  : "bg-white hover:bg-neutral-50"
               }
             `}
             aria-pressed={isSelected}
@@ -43,7 +42,7 @@ export default function StyleSelector({
           >
             {/* 已選擇標記 */}
             {isSelected && (
-              <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-600">
+              <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center bg-neutral-900">
                 <Check className="h-2.5 w-2.5 text-white" strokeWidth={3} />
               </span>
             )}
@@ -56,7 +55,7 @@ export default function StyleSelector({
             {/* 中文名稱 */}
             <span
               className={`text-xs font-semibold leading-tight ${
-                isSelected ? "text-indigo-700" : "text-slate-700"
+                isSelected ? "text-accent-strong" : "text-neutral-900"
               }`}
             >
               {style.name}

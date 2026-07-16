@@ -4,14 +4,28 @@
 // ============================================================
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Source_Serif_4, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-// 載入 Google Fonts — Inter 字型
+// 字型系統：無襯線（介面）+ 襯線（標題，編輯感）+ 等寬（標籤／數據）
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap", // 改善字型載入體驗
+  display: "swap",
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+  weight: ["500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "500", "700"],
 });
 
 // ★ 核心 SEO 設定：next/metadata API
@@ -93,7 +107,7 @@ export default function RootLayout({
 }>) {
   return (
     // lang 屬性對 SEO 與無障礙設計很重要
-    <html lang="zh-TW" className={inter.variable}>
+    <html lang="zh-TW" className={`${inter.variable} ${sourceSerif.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased">
         {children}
       </body>

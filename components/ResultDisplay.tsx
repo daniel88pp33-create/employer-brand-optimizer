@@ -59,10 +59,10 @@ function CopyButton({ text, label, copyKey }: { text: string; label: string; cop
   return (
     <button
       onClick={handleCopy}
-      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
+      className={`flex items-center gap-1.5 border px-3 py-1.5 text-xs font-bold uppercase tracking-wide transition-colors ${
         copied
-          ? 'bg-green-500/20 text-green-400 border border-green-500/40'
-          : 'bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-700 hover:text-gray-200 hover:border-gray-600'
+          ? 'border-emerald-600 bg-emerald-50 text-emerald-700'
+          : 'border-neutral-900 text-neutral-900 hover:bg-neutral-900 hover:text-white'
       }`}
     >
       {copied ? (
@@ -91,21 +91,21 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
   // Empty state
   if (!hasContent && !isGenerating) {
     return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[500px] text-center px-8 py-12">
-        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500/15 to-violet-500/15 border border-blue-500/20 flex items-center justify-center mb-6">
-          <Sparkles className="w-9 h-9 text-blue-400/70" />
+      <div className="flex h-full min-h-[500px] flex-col items-center justify-center px-8 py-12 text-center">
+        <div className="mb-6 flex h-16 w-16 items-center justify-center border border-neutral-200">
+          <Sparkles className="h-7 w-7 text-accent-strong" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-300 mb-3">文案將在此顯示</h3>
-        <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
+        <h3 className="mb-3 text-lg font-semibold text-neutral-900">文案將在此顯示</h3>
+        <p className="max-w-sm text-sm leading-relaxed text-slate-500">
           填寫左側的公司資訊與原始 JD，選擇一種品牌風格，
           <br />
           點擊「開始生成」即可獲得 AI 優化的雇主品牌文案
         </p>
-        <div className="mt-6 flex flex-wrap gap-2 justify-center">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           {['中英文對照', '20 種風格', '一鍵複製', '串流輸出'].map((tag) => (
             <span
               key={tag}
-              className="px-3 py-1 rounded-full bg-gray-800/80 border border-gray-700/60 text-gray-400 text-xs"
+              className="border border-neutral-200 px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-500"
             >
               {tag}
             </span>
@@ -118,16 +118,16 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
   // Streaming state (showing raw text as it arrives)
   if (isStreaming && !isDone) {
     return (
-      <div className="flex flex-col h-full min-h-[500px]">
-        <div className="flex items-center gap-2 mb-4 px-1">
+      <div className="flex h-full min-h-[500px] flex-col">
+        <div className="mb-4 flex items-center gap-2 px-1">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75"></span>
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-strong"></span>
           </span>
-          <span className="text-xs text-blue-400 font-medium">AI 正在生成文案...</span>
+          <span className="font-mono text-xs font-medium text-accent-strong">AI 正在生成文案...</span>
         </div>
-        <div className="flex-1 bg-gray-900/60 border border-gray-700/60 rounded-xl p-5 overflow-auto">
-          <pre className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap font-sans cursor-blink">
+        <div className="flex-1 overflow-auto border border-neutral-200 bg-neutral-50 p-5">
+          <pre className="cursor-blink whitespace-pre-wrap font-sans text-sm leading-relaxed text-neutral-700">
             {rawResult}
           </pre>
         </div>
@@ -141,16 +141,16 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
   const allText = `【中文版本】\n\n${zhText}\n\n\n【English Version】\n\n${enText}`;
 
   return (
-    <div className="flex flex-col h-full min-h-[500px] animate-fade-in">
+    <div className="flex h-full min-h-[500px] flex-col animate-fade-in">
       {/* Tab header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex gap-1 bg-gray-900/80 border border-gray-700/60 rounded-xl p-1">
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex border border-neutral-200">
           <button
             onClick={() => setActiveTab('zh')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center gap-1.5 px-4 py-2 text-sm font-bold transition-colors ${
               activeTab === 'zh'
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                : 'text-gray-400 hover:text-gray-200'
+                ? 'bg-neutral-900 text-white'
+                : 'text-slate-500 hover:text-neutral-900'
             }`}
           >
             <Languages className="w-3.5 h-3.5" />
@@ -158,10 +158,10 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
           </button>
           <button
             onClick={() => setActiveTab('en')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center gap-1.5 border-l border-neutral-200 px-4 py-2 text-sm font-bold transition-colors ${
               activeTab === 'en'
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                : 'text-gray-400 hover:text-gray-200'
+                ? 'bg-neutral-900 text-white'
+                : 'text-slate-500 hover:text-neutral-900'
             }`}
           >
             <Globe className="w-3.5 h-3.5" />
@@ -174,18 +174,18 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
       </div>
 
       {/* Content area */}
-      <div className="flex-1 relative">
+      <div className="relative flex-1">
         {activeTab === 'zh' ? (
           <div className="h-full animate-slide-up">
-            <div className="flex items-center justify-between mb-2 px-1">
-              <span className="text-xs text-gray-500">LinkedIn / 104 / Yourator 適用</span>
+            <div className="mb-2 flex items-center justify-between px-1">
+              <span className="text-xs text-slate-500">LinkedIn / 104 / Yourator 適用</span>
               {zhText && <CopyButton text={zhText} label="複製中文" copyKey="zh" />}
             </div>
-            <div className="bg-gray-900/60 border border-gray-700/60 rounded-xl p-5 overflow-auto max-h-[calc(100vh-340px)] min-h-[380px]">
+            <div className="max-h-[calc(100vh-340px)] min-h-[380px] overflow-auto border border-neutral-200 bg-neutral-50 p-5">
               <article>
-                <pre className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap font-sans">
+                <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-neutral-800">
                   {zhText || (
-                    <span className="text-gray-500 italic">（中文版本未生成，請重試）</span>
+                    <span className="italic text-slate-400">（中文版本未生成，請重試）</span>
                   )}
                 </pre>
               </article>
@@ -193,15 +193,15 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
           </div>
         ) : (
           <div className="h-full animate-slide-up">
-            <div className="flex items-center justify-between mb-2 px-1">
-              <span className="text-xs text-gray-500">LinkedIn / Glassdoor / Indeed ready</span>
+            <div className="mb-2 flex items-center justify-between px-1">
+              <span className="text-xs text-slate-500">LinkedIn / Glassdoor / Indeed ready</span>
               {enText && <CopyButton text={enText} label="Copy English" copyKey="en" />}
             </div>
-            <div className="bg-gray-900/60 border border-gray-700/60 rounded-xl p-5 overflow-auto max-h-[calc(100vh-340px)] min-h-[380px]">
+            <div className="max-h-[calc(100vh-340px)] min-h-[380px] overflow-auto border border-neutral-200 bg-neutral-50 p-5">
               <article>
-                <pre className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap font-sans">
+                <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-neutral-800">
                   {enText || (
-                    <span className="text-gray-500 italic">
+                    <span className="italic text-slate-400">
                       (English version not generated, please try again)
                     </span>
                   )}
@@ -213,13 +213,13 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
       </div>
 
       {/* Footer note */}
-      <div className="mt-3 flex items-center gap-1.5 text-gray-600 text-xs">
+      <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
         <FileText className="w-3 h-3" />
         <span>複製後可直接貼到 LinkedIn 職缺、104 職務說明等欄位</span>
       </div>
 
       {/* Disclaimer */}
-      <p className="mt-3 text-gray-600 text-xs leading-relaxed">
+      <p className="mt-3 text-xs leading-relaxed text-slate-400">
         AI 產出的內容主要是用來作為優化職缺敘述的初步框架與參考版本。企業仍需依據自身實際營運需求，以及所在地的相關法規進行調整與補充，才能打造出最貼近團隊需求的人才招募內容。
       </p>
 
@@ -227,7 +227,7 @@ export default function ResultDisplay({ rawResult, isGenerating, onRegenerate }:
       {onRegenerate && (
         <button
           onClick={onRegenerate}
-          className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-gray-600 text-gray-300 text-sm font-medium hover:border-blue-500/60 hover:text-blue-300 hover:bg-blue-500/10 transition-all duration-200"
+          className="mt-4 flex w-full items-center justify-center gap-2 border border-neutral-300 px-4 py-2.5 text-sm font-bold text-neutral-700 transition-colors hover:border-neutral-900 hover:text-neutral-900"
         >
           <RefreshCw className="w-4 h-4" />
           重新生成（產出不同版本）

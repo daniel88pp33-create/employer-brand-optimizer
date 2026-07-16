@@ -9,26 +9,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50:  "#eef2ff",
-          100: "#e0e7ff",
-          500: "#6366f1",
-          600: "#4f46e5",
-          700: "#4338ca",
-          900: "#1e1b4b",
+        // single accent (Swiss Modernism 2.0 rule: one vibrant accent only)
+        accent: {
+          DEFAULT: "#A16207", // yellow-700
+          strong: "#854D0E",  // yellow-800
+          tint: "#FEF9C3",    // yellow-100
         },
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-      },
-      backgroundImage: {
-        "hero-gradient": "linear-gradient(135deg, #0f0c29, #302b63, #24243e)",
-        "card-gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-in-out",
         "slide-up": "slideUp 0.4s ease-out",
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "fade-in-up": "fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) both",
       },
       keyframes: {
         fadeIn: {
@@ -37,6 +33,10 @@ const config: Config = {
         },
         slideUp: {
           "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(14px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
